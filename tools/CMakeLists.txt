@@ -33,7 +33,9 @@ if(TEST_SUITE_USE_PERF)
     COMMAND chmod +x ${CMAKE_CURRENT_BINARY_DIR}/timeit-target
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/timeit.sh)
   add_custom_target(build-timeit-target DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/timeit-target)
-else()
+elseif(TEST_SUITE_COLLECT_COMPILE_TIME)
+  # TODO: timeit should be built for the host, not the target, as it's used
+  # for wrapping compile commands
   add_executable(timeit-target ${CMAKE_CURRENT_SOURCE_DIR}/timeit.c)
   llvm_codesign(timeit-target)
   add_executable(build-timeit-target ALIAS timeit-target)

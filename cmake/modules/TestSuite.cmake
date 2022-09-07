@@ -102,10 +102,13 @@ endfunction()
 # usually do not need to call this directly when using `llvm_test_executable`
 # or `llvm_test_library`.
 function(test_suite_add_build_dependencies target)
+  set(TIMEIT_DEPS)
+  if (TEST_SUITE_COLLECT_COMPILE_TIME)
+    set(TIMEIT_DEPS build-timeit build-timeit-target)
+  endif()
   add_dependencies(${target}
     build-HashProgramOutput.sh
-    build-timeit
-    build-timeit-target
+    ${TIMEIT_DEPS}
     build-fpcmp
     build-fpcmp-target
     build-litsupport
