@@ -9,6 +9,7 @@ else()
   set(SQLITE_INPUTNAME speedtest)
 endif()
 find_package(TCL)
+if (TCL_FOUND)
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test15.sql
     COMMAND ${TCL_TCLSH} ${CMAKE_CURRENT_SOURCE_DIR}/${SQLITE_INPUTNAME}.tcl
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -20,3 +21,4 @@ llvm_multisource(sqlite3
 )
 add_dependencies(sqlite3 sqlite_input)
 llvm_test_data(sqlite3 sqlite3rc commands)
+endif()
