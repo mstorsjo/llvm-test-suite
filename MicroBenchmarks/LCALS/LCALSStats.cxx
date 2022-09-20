@@ -18,6 +18,10 @@
 #include<cstdlib>
 #include<cmath>
 
+#ifdef _WIN32
+#define drand48() (1.0*rand() / RAND_MAX)
+#endif
+
 using namespace std;
 
 //
