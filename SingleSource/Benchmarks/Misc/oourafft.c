@@ -37,7 +37,10 @@ int main()
   t_overhead = t_end - t_start;
 
   /* Prepare aux data */
-#if !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(_AIX) /* Darwin always 16-byte aligns malloc data */
+#if defined(_WIN32)
+  ip = _aligned_malloc(sqrt(N)*sizeof(int), 16);
+  w  = _aligned_malloc(2*N*5/4*sizeof(double), 16);
+#elif !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(_AIX) /* Darwin always 16-byte aligns malloc data */
   ip = memalign(16, sqrt(N)*sizeof(int));
   w  = memalign(16, 2*N*5/4*sizeof(double));
 #else
@@ -47,7 +50,11 @@ int main()
   makewt(N >> 1, ip, w);
   
   /* Allocate buffers */
-#if !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(_AIX) /* Darwin always 16-byte aligns malloc data */
+#if defined(_WIN32)
+  ref = _aligned_malloc(2*N*sizeof(double), 16);
+  cmp = _aligned_malloc(2*N*sizeof(double), 16);
+  src = _aligned_malloc(2*N*sizeof(double), 16);
+#elif !defined(__APPLE__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(_AIX) /* Darwin always 16-byte aligns malloc data */
   ref = memalign(16, 2*N*sizeof(double));
   cmp = memalign(16, 2*N*sizeof(double));
   src = memalign(16, 2*N*sizeof(double));
@@ -106,12 +113,21 @@ int main()
   }
   /*printf("Overall time: %le, for single correlation: %le\n", t_total, t_total/TRIES);*/
 
+#if defined(_WIN32)
+  _aligned_free(ref);
+  _aligned_free(w);
+  _aligned_free(ip);
+
+  _aligned_free(cmp);
+  _aligned_free(src);
+#else
   free(ref);
   free(w);
   free(ip);
 
   free(cmp);
   free(src);
+#endif
   
   return 0;
 }
@@ -136,6 +152,7 @@ double errorcheck(int nini, int nend, double scale, double *a)
   return err;
 }
 
+#undef N
 #ifdef WIN32
 #include <windows.h>
 
