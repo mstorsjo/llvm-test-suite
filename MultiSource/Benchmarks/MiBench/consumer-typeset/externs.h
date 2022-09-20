@@ -32,6 +32,11 @@
 #include <stdarg.h>
 #include <locale.h>
 
+#ifdef _WIN32
+#undef LOCALE_ON
+#define LOCALE_ON 0
+#endif
+
 #if LOCALE_ON
 #include <nl_types.h>
 extern nl_catd MsgCat;

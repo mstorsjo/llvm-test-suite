@@ -2,6 +2,10 @@
   Copyright 2002-2003 John Plevyak, All Rights Reserved
 */
 
+#ifdef _WIN32
+typedef unsigned int uint;
+#endif
+
 #define INITIAL_SET_SIZE_INDEX		2
 
 #define INITIAL_VEC_SHIFT	3

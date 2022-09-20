@@ -11,6 +11,12 @@
 #include <sys/types.h>
 #endif
 #include "YAML_Doc.hpp"
+
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
 using namespace std;
 
 //set the microapp_name and version which will become part of the YAML doc.

@@ -45,6 +45,11 @@
 #endif
 #include "blob.h"
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
 #ifndef	O_BINARY
 #define	O_BINARY	0
 #endif

@@ -71,7 +71,7 @@ static char *g_HugetlbPath;
 
 #endif
 
-static void *VirtualAlloc(size_t size, int memLargePages)
+static void *VirtualAlloc(void *ptr, size_t size, int memLargePages, int a)
 {
   #ifdef _7ZIP_LARGE_PAGES
   if (memLargePages)
@@ -126,7 +126,7 @@ static void *VirtualAlloc(size_t size, int memLargePages)
   return malloc(size);
 }
 
-static int VirtualFree(void *address)
+static int VirtualFree(void *address, int size, int type)
 {
   #ifdef _7ZIP_LARGE_PAGES
   #ifdef __linux__
@@ -156,7 +156,7 @@ void *MidAlloc(size_t size)
   #ifdef _SZ_ALLOC_DEBUG
   fprintf(stderr, "\nAlloc_Mid %10d bytes;  count = %10d", size, g_allocCountMid++);
   #endif
-  return VirtualAlloc(size, 0);
+  return VirtualAlloc(NULL, size, 0, 0);
 }
 
 void MidFree(void *address)
@@ -167,7 +167,7 @@ void MidFree(void *address)
   #endif
   if (address == 0)
     return;
-  VirtualFree(address);
+  VirtualFree(address, 0, 0);
 }
 
 #ifdef _7ZIP_LARGE_PAGES
@@ -259,12 +259,12 @@ void *BigAlloc(size_t size)
   #ifdef _7ZIP_LARGE_PAGES
   if (g_LargePageSize != 0 && g_LargePageSize <= (1 << 30) && size >= (1 << 18))
   {
-    void *res = VirtualAlloc( (size + g_LargePageSize - 1) & (~(g_LargePageSize - 1)), 1);
+    void *res = VirtualAlloc( NULL, (size + g_LargePageSize - 1) & (~(g_LargePageSize - 1)), 1, 0);
     if (res != 0)
       return res;
   }
   #endif
-  return VirtualAlloc(size, 0);
+  return VirtualAlloc(NULL, size, 0, 0);
 }
 
 void BigFree(void *address)
@@ -276,5 +276,5 @@ void BigFree(void *address)
   
   if (address == 0)
     return;
-  VirtualFree(address);
+  VirtualFree(address, 0, 0);
 }

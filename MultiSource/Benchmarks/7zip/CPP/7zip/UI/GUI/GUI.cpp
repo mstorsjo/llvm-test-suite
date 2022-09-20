@@ -97,7 +97,7 @@ int Main2(int argc,TCHAR **argv)
   parser.Parse1(commandStrings, options);
   parser.Parse2(options);
 
-  #if defined(_WIN32) && defined(_7ZIP_LARGE_PAGES)
+  #if 0 && defined(_7ZIP_LARGE_PAGES)
   if (options.LargePages)
     NSecurity::EnableLockMemoryPrivilege();
   #endif

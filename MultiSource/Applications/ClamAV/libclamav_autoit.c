@@ -41,6 +41,11 @@
 #include "others.h"
 #include "scanners.h"
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#define fsync(fd) do { } while (0)
+#endif
 
 /* FIXME: use unicode detection and normalization from edwin */
 static unsigned int u2a(uint8_t *dest, unsigned int len) {

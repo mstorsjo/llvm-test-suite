@@ -5,9 +5,11 @@
 
 #include "../Common/MyString.h"
 
+#ifndef _WIN32
 typedef void * HMODULE;
 
 typedef int (*FARPROC)();
+#endif
 
 namespace NWindows {
 namespace NDLL {

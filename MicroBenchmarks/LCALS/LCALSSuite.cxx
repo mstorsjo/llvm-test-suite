@@ -19,6 +19,11 @@
 #include<sys/types.h>
 #include<sys/stat.h>
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
 //#define LCALS_OMP_MEM_INIT
 #undef LCALS_OMP_MEM_INIT
 
@@ -2199,10 +2204,13 @@ void freeLoopData()
    //  De-allocate 1D loop length Real arrays.
    //
    for (unsigned i = 0; i < s_loop_data->s_num_1D_Real_arrays; ++i) {
+#ifndef _WIN32
+#define _aligned_free free
+#endif
 #if defined(USE_PTR_CLASS)
-      free( s_loop_data->array_1D_Real[i].get() );
+      _aligned_free( s_loop_data->array_1D_Real[i].get() );
 #else
-      free( s_loop_data->array_1D_Real[i] );
+      _aligned_free( s_loop_data->array_1D_Real[i] );
 #endif
    }
 
@@ -2211,9 +2219,9 @@ void freeLoopData()
    //
    for (unsigned i = 0; i < s_loop_data->s_num_1D_Nx4_Real_arrays; ++i) {
 #if defined(USE_PTR_CLASS)
-      free( s_loop_data->array_1D_Nx4_Real[i].get() );
+      _aligned_free( s_loop_data->array_1D_Nx4_Real[i].get() );
 #else
-      free( s_loop_data->array_1D_Nx4_Real[i] );
+      _aligned_free( s_loop_data->array_1D_Nx4_Real[i] );
 #endif
    }
 
@@ -2221,7 +2229,7 @@ void freeLoopData()
    //  De-allocate 1D loop length Indx arrays.
    //
    for (unsigned i = 0; i < s_loop_data->s_num_1D_Indx_arrays; ++i) {
-      free( s_loop_data->array_1D_Indx[i] );
+      _aligned_free( s_loop_data->array_1D_Indx[i] );
    }
 
    //
@@ -2229,9 +2237,9 @@ void freeLoopData()
    //
    for (unsigned i = 0; i < s_loop_data->s_num_1D_Complex_arrays; ++i) {
 #if defined(USE_PTR_CLASS)
-      free( s_loop_data->array_1D_Complex[i].get() );
+      _aligned_free( s_loop_data->array_1D_Complex[i].get() );
 #else
-      free( s_loop_data->array_1D_Complex[i] );
+      _aligned_free( s_loop_data->array_1D_Complex[i] );
 #endif
    }
 
@@ -2240,9 +2248,9 @@ void freeLoopData()
    //
    for (unsigned i = 0; i < s_loop_data->s_num_2D_7xN_Real_arrays; ++i) {
 #if defined(USE_PTR_CLASS)
-      free( s_loop_data->array_2D_7xN_Real[i][0].get() );
+      _aligned_free( s_loop_data->array_2D_7xN_Real[i][0].get() );
 #else
-      free( s_loop_data->array_2D_7xN_Real[i][0] );
+      _aligned_free( s_loop_data->array_2D_7xN_Real[i][0] );
 #endif
       delete [] s_loop_data->array_2D_7xN_Real[i]; 
    }
@@ -2252,9 +2260,9 @@ void freeLoopData()
    //
    for (unsigned i = 0; i < s_loop_data->s_num_2D_64x64_Real_arrays; ++i) {
 #if defined(USE_PTR_CLASS)
-      free( s_loop_data->array_2D_64x64_Real[i][0].get() );
+      _aligned_free( s_loop_data->array_2D_64x64_Real[i][0].get() );
 #else
-      free( s_loop_data->array_2D_64x64_Real[i][0] );
+      _aligned_free( s_loop_data->array_2D_64x64_Real[i][0] );
 #endif
       delete [] s_loop_data->array_2D_64x64_Real[i]; 
    }
@@ -2264,9 +2272,9 @@ void freeLoopData()
    //
    for (unsigned i = 0; i < s_loop_data->s_num_3D_2xNx4_Real_arrays; ++i) {
 #if defined(USE_PTR_CLASS)
-      free( s_loop_data->array_3D_2xNx4_Real[i][0][0].get() );
+      _aligned_free( s_loop_data->array_3D_2xNx4_Real[i][0][0].get() );
 #else
-      free( s_loop_data->array_3D_2xNx4_Real[i][0][0] );
+      _aligned_free( s_loop_data->array_3D_2xNx4_Real[i][0][0] );
 #endif
       for (Index_type k = 0; k < 2; ++k) {
          delete [] s_loop_data->array_3D_2xNx4_Real[i][k]; 
@@ -2294,7 +2302,11 @@ namespace {
 Real_ptr allocAndInitData(LoopData::RealArray& ra, Index_type len)
 {
    Real_ptr data = 0; 
+#ifdef _WIN32
+   data = (Real_ptr) _aligned_malloc( len*sizeof(Real_type), LCALS_DATA_ALIGN );
+#else
    posix_memalign( (void **)&data, LCALS_DATA_ALIGN, len*sizeof(Real_type) );
+#endif
    ra.data = data;
    ra.len = len; 
 
@@ -2306,7 +2318,11 @@ Real_ptr allocAndInitData(LoopData::RealArray& ra, Index_type len)
 Index_type* allocAndInitData(LoopData::IndxArray& ia, Index_type len)
 {
    Index_type* data = 0;
+#ifdef _WIN32
+   data = (Index_type*) _aligned_malloc( len*sizeof(Index_type), LCALS_DATA_ALIGN );
+#else
    posix_memalign( (void **)&data, LCALS_DATA_ALIGN, len*sizeof(Index_type) );
+#endif
    ia.data = data;
    ia.len = len;
 

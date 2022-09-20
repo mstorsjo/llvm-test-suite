@@ -55,6 +55,11 @@
 #include "timer.h"
 #include "fmemopen.h"
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
 #ifdef HAVE_HDF5
 #include "hdf5.h"
 #endif

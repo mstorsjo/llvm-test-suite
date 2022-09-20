@@ -107,6 +107,7 @@ namespace NSynchronization {
 
 }}
 
+#ifndef _WIN32
 DWORD WINAPI WaitForMultipleObjects( DWORD count, const HANDLE *handles, BOOL wait_all, DWORD timeout )
 {
     TRACEN((printf("\nT%d : E1-WaitForMultipleObjects(%d)\n",(int)pthread_self(),(int)count)))
@@ -155,3 +156,4 @@ DWORD WINAPI WaitForMultipleObjects( DWORD count, const HANDLE *handles, BOOL wa
   return ETIMEDOUT; // WAIT_TIMEOUT;
 }
 
+#endif

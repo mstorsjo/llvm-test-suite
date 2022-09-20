@@ -7,6 +7,7 @@
 #ifdef UNDER_CE
 #include <basetyps.h>
 #endif
+#define INITGUID
 #include <initguid.h>
 #ifdef UNDER_CE
 DEFINE_GUID(IID_IUnknown,

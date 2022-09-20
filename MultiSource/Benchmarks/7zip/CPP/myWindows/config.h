@@ -24,7 +24,7 @@
 
   #endif /* !ENV_MACOSX && !ENV_BEOS */
 
-  #if !defined(ENV_BEOS)
+  #if !defined(ENV_BEOS) && !defined(_WIN32)
     #define ENV_HAVE_GETPASS
 
     #if !defined(sun) && !defined(_AIX)
@@ -35,7 +35,9 @@
   #endif
 
   /* lstat, readlink and S_ISLNK */
+#ifndef _WIN32
   #define ENV_HAVE_LSTAT
+#endif
 
   /* <locale.h> */
   #define ENV_HAVE_LOCALE

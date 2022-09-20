@@ -58,6 +58,11 @@
 #include <sys/stat.h>
 #include "graphics.h"
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

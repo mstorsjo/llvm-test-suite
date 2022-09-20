@@ -36,6 +36,11 @@
 #include "scanners.h"
 #include "vba_extract.h"
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
 enum parse_state { PARSE_MAIN, PARSE_CONTROL_, PARSE_CONTROL_WORD, PARSE_CONTROL_SYMBOL, PARSE_CONTROL_WORD_PARAM, PARSE_INTERPRET_CONTROLWORD };
 
 enum rtf_action

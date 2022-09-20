@@ -22,6 +22,15 @@
 
 #include <utime.h>
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
+#ifndef FILE_ATTRIBUTE_UNIX_EXTENSION
+#define FILE_ATTRIBUTE_UNIX_EXTENSION 0
+#endif
+
 // #define TRACEN(u) u;
 #define TRACEN(u)  /* */
 
@@ -246,6 +255,7 @@ static BOOL WINAPI RemoveDirectory(LPCSTR path) {
 #endif
 
 #ifdef _UNICODE
+#ifndef _WIN32
 static BOOL WINAPI RemoveDirectory(LPCWSTR path) {
   if (!path || !*path) {
     SetLastError(ERROR_PATH_NOT_FOUND);
@@ -259,6 +269,7 @@ static BOOL WINAPI RemoveDirectory(LPCWSTR path) {
   }
   return TRUE;
 }
+#endif
 #endif
 
 static int copy_fd(int fin,int fout)
@@ -471,6 +482,7 @@ bool MyMoveFile(LPCWSTR existFileName, LPCWSTR newFileName)
 #endif
 
 
+#ifdef ENV_HAVE_LSTAT
 static int convert_to_symlink(const char * name) {
   FILE *file = fopen(name,"rb");
   if (file) {
@@ -487,6 +499,7 @@ static int convert_to_symlink(const char * name) {
   }
   return -1;
 }
+#endif
 
 bool MySetFileAttributes(LPCTSTR fileName, DWORD fileAttributes)
 {
@@ -602,7 +615,7 @@ bool CreateComplexDirectory(LPCTSTR _aPathName)
       break;
     if(::GetLastError() == ERROR_ALREADY_EXISTS)
     {
-#ifdef _WIN32 // FIXED for supporting symbolic link instead of a directory
+#if 0
       NFind::CFileInfo fileInfo;
       if (!NFind::FindFile(pathName, fileInfo)) // For network folders
         return true;

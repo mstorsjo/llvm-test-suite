@@ -865,7 +865,7 @@ HRESULT UpdateArchive(
     }
   }
 
-  #if defined(_WIN32) && !defined(UNDER_CE)
+  #if 0 && !defined(UNDER_CE)
   if (options.EMailMode)
   {
     NDLL::CLibrary mapiLib;

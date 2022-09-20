@@ -62,7 +62,11 @@ inline void WINAPI SetLastError( DWORD err ) { errno = err; }
 
 void Sleep(unsigned millisleep);
 
+#ifdef _WIN32
+typedef HANDLE t_processID;
+#else
 typedef pid_t t_processID;
+#endif
 
 t_processID GetCurrentProcess(void);
 
@@ -72,7 +76,9 @@ void SetPriorityClass(t_processID , int priority);
 
 #ifdef __cplusplus
 class wxWindow;
+#ifndef _WIN32
 typedef wxWindow *HWND;
+#endif
 
 #define MB_ICONERROR (0x00000200) // wxICON_ERROR
 #define MB_YESNOCANCEL (0x00000002 | 0x00000008 | 0x00000010) // wxYES | wxNO | wxCANCEL
@@ -87,6 +93,7 @@ typedef wxWindow *HWND;
 #define MessageBox MessageBoxW
 int MessageBoxW(wxWindow * parent, const TCHAR * mes, const TCHAR * title,int flag);
 
+#ifndef _WIN32
 typedef void *HINSTANCE;
 
 typedef          int   INT_PTR;  // FIXME 64 bits ?
@@ -100,6 +107,7 @@ typedef UINT_PTR WPARAM;
 */
 typedef LONG_PTR LPARAM;
 typedef LONG_PTR LRESULT;
+#endif
 
 #define CALLBACK /* */
 

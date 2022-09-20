@@ -16,9 +16,6 @@
 #include "Common/StringToInt.h"
 
 #include "Windows/Error.h"
-#ifdef _WIN32
-#include "Windows/MemoryLock.h"
-#endif
 
 #include "../Common/ArchiveCommandLine.h"
 #include "../Common/ExitCode.h"
@@ -221,7 +218,7 @@ int Main2(
   if (options.LargePages)
   {
     SetLargePageSize();
-#ifdef _WIN32
+#if 0
     NSecurity::EnableLockMemoryPrivilege();
 #endif
   }

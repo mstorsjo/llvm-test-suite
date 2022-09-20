@@ -24,7 +24,7 @@ public:
     { return Thread_Create(&thread, startAddress, parameter); }
   WRes Wait() { return Thread_Wait(&thread); }
   
-  #ifdef _WIN32
+  #if 0
   operator HANDLE() { return thread; }
   void Attach(HANDLE handle) { thread = handle; }
   HANDLE Detach() { HANDLE h = thread; thread = NULL; return h; }

@@ -91,6 +91,8 @@ void WINAPI RtlSecondsSince1970ToTime( DWORD Seconds, LARGE_INTEGER *Time )
 }
  */
 
+#ifndef _WIN32
+
 BOOL WINAPI DosDateTimeToFileTime( WORD fatdate, WORD fattime, FILETIME * ft)
 {
     struct tm newtm;
@@ -123,6 +125,7 @@ BOOL WINAPI DosDateTimeToFileTime( WORD fatdate, WORD fattime, FILETIME * ft)
 
     return TRUE;
 }
+#endif
 
 /*
 BOOL WINAPI DosDateTimeToFileTime( WORD fatdate, WORD fattime, FILETIME * ft) {
@@ -163,6 +166,7 @@ BOOLEAN WINAPI RtlTimeToSecondsSince1970( const LARGE_INTEGER *Time, DWORD *Seco
   return TRUE;
 }
 
+#ifndef _WIN32
 BOOL WINAPI FileTimeToDosDateTime( const FILETIME *ft, WORD *fatdate, WORD *fattime ) {
   LARGE_INTEGER       li;
   ULONG               t;
@@ -432,3 +436,4 @@ BOOL WINAPI SystemTimeToFileTime( const SYSTEMTIME *syst, FILETIME * ft ) {
   return TRUE;
 }
 
+#endif

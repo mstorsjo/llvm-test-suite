@@ -191,7 +191,7 @@ STDMETHODIMP CHandler::UpdateItems(ISequentialOutStream *outStream, UInt32 numIt
       bool tryUtf8 = true;
       if (m_ForceLocal || !m_ForceUtf8)
       {
-#ifdef _WIN32
+#if 0
         bool defaultCharWasUsed;
         ui.Name = UnicodeStringToMultiByte(name, CP_OEMCP, '_', defaultCharWasUsed);
         tryUtf8 = (!m_ForceLocal && (defaultCharWasUsed ||

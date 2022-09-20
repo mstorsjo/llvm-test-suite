@@ -10,10 +10,6 @@ extern "C"
 #include "../../C/Threads.h"
 }
 
-#ifdef _WIN32
-#include "Handle.h"
-#endif
-
 namespace NWindows {
 namespace NSynchronization {
 
@@ -33,13 +29,13 @@ protected:
   ::CEvent _object;
 public:
   bool IsCreated() { return Event_IsCreated(&_object) != 0; }
-#ifdef _WIN32
+#if 0
   operator HANDLE() { return _object.handle; }
 #endif
   CBaseEvent() { Event_Construct(&_object); }
   ~CBaseEvent() { Close(); }
   WRes Close() { return Event_Close(&_object); }
-  #ifdef _WIN32
+  #if 0
   WRes Create(bool manualReset, bool initiallyOwn, LPCTSTR name = NULL,
       LPSECURITY_ATTRIBUTES securityAttributes = NULL)
   {
@@ -77,7 +73,7 @@ public:
       return 0;
     return ManualResetEvent_CreateNotSignaled(&_object);
   }
-  #ifdef _WIN32
+  #if 0
   WRes CreateWithName(bool initiallyOwn, LPCTSTR name)
   {
     return CBaseEvent::Create(true, initiallyOwn, name);
@@ -100,7 +96,7 @@ public:
   }
 };
 
-#ifdef _WIN32
+#if 0
 class CObject: public CHandle
 {
 public:
@@ -146,7 +142,7 @@ public:
   CSemaphore() { Semaphore_Construct(&_object); }
   ~CSemaphore() { Close(); }
   WRes Close() {  return Semaphore_Close(&_object); }
-#ifdef _WIN32
+#if 0
   operator HANDLE() { return _object.handle; }
 #endif
   WRes Create(UInt32 initiallyCount, UInt32 maxCount)
@@ -179,9 +175,7 @@ public:
 
 }}
 
-#ifndef _WIN32
 #include "Synchronization2.h"
-#endif
 
 #endif
 

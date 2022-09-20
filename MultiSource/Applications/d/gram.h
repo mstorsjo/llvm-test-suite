@@ -5,6 +5,10 @@
 #ifndef _gram_H_
 #define _gram_H_
 
+#ifdef _WIN32
+typedef unsigned int uint;
+#endif
+
 #define EOF_SENTINAL		"\377"
 #define NO_PROD			0xFFFFFFFF
 

@@ -9,6 +9,10 @@
 #include <unistd.h>
 #include <errno.h>
 
+#ifndef FILE_ATTRIBUTE_UNIX_EXTENSION
+#define FILE_ATTRIBUTE_UNIX_EXTENSION 0
+#endif
+
 #ifdef ENV_HAVE_LSTAT
 extern "C"
 {

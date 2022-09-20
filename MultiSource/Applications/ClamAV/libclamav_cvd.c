@@ -41,6 +41,12 @@
 #include "str.h"
 #include "cvd.h"
 
+#ifdef _WIN32
+#include <direct.h>
+#define mkdir(path, mode) _mkdir(path)
+#endif
+
+
 #define TAR_BLOCKSIZE 512
 
 int cli_untgz(int fd, const char *destdir)

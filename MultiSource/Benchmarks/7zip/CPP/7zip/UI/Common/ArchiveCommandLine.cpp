@@ -15,12 +15,7 @@
 
 #include "Windows/FileDir.h"
 #include "Windows/FileName.h"
-#ifdef _WIN32
-#include "Windows/FileMapping.h"
-#include "Windows/Synchronization.h"
-#else
 #include "myPrivate.h"
-#endif
 
 #include "ArchiveCommandLine.h"
 #include "EnumDirItems.h"
@@ -307,7 +302,7 @@ static void AddToCensorFromNonSwitchesStrings(
   }
 }
 
-#ifdef _WIN32
+#if 0
 static void ParseMapWithPaths(NWildcard::CCensor &wildcardCensor,
     const UString &switchParam, bool include,
     NRecursedType::EEnum commonRecursedType)
@@ -399,7 +394,7 @@ static void AddSwitchWildCardsToCensor(NWildcard::CCensor &wildcardCensor,
       AddNameToCensor(wildcardCensor, tail, include, recursedType);
     else if (name[pos] == kFileListID)
       AddToCensorFromListFile(wildcardCensor, tail, include, recursedType, codePage);
-    #ifdef _WIN32
+    #if 0
     else if (name[pos] == kMapNameID)
       ParseMapWithPaths(wildcardCensor, tail, include, recursedType);
     #endif
